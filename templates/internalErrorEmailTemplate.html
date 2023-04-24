@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Erro interno da aplicação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        .blue {
+          color: #337ab7;
+        }
+
+        .button {
+        background-color: #0ef; /* Cor de fundo do botão */
+        border: none; /* Remove a borda do botão */
+        color: black; /* Cor do texto do botão */
+        padding: 10px 20px; /* Espaçamento interno do botão */
+        text-align: center; /* Centraliza o texto do botão */
+        text-decoration: none; /* Remove o sublinhado do texto do botão */
+        display: inline-block; /* Faz o botão ocupar apenas o espaço necessário */
+        font-size: 16px; /* Tamanho do texto do botão */
+        margin: 4px 2px; /* Espaçamento externo do botão */
+        cursor: pointer; /* Altera o cursor do mouse quando passa sobre o botão */
+        border-radius: 4px; /* Adiciona bordas arredondadas ao botão */
+      }
+      
+      .button:hover {
+        opacity: 0.5; /* Cor de fundo do botão quando passa o mouse sobre ele */
+      }
+    </style>
+</head>
+<body>
+    <h1 class="blue">{{.Title}} - Erro</h1>
+
+    <p>Olá,</p>
+
+    <p>O <span class="blue">{{.Title}}</span> está atualmente apresentando um erro. Isso ocorreu ás {{.ErrorTime}}.</p>
+
+    <!-- <a href="https://monitoring.kaua.dev/dashboard" class="button">Clique aqui</a> -->
+
+    <p>Atenciosamente Kauã</p>
+</body>
+</html>
