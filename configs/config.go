@@ -1,6 +1,6 @@
 package configs
 
-import "github.com/spf13/viper"
+import "os"
 
 var cfg *config
 
@@ -30,39 +30,30 @@ type MailConfig struct {
 	SmtpPort string
 }
 
-func Load() error {
-	viper.SetConfigFile(".env")
-	err := viper.ReadInConfig()
-
-	if err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return err
-		}
-	}
-
+func Load() (*config, error) {
 	cfg = new(config)
 
 	cfg.DB = DBConfig{
-		Host:     viper.GetString("PG_HOST"),
-		Port:     viper.GetString("PG_PORT"),
-		User:     viper.GetString("PG_USER"),
-		Password: viper.GetString("PG_PASSWORD"),
-		Database: viper.GetString("PG_DATABASE"),
+		Host:     os.Getenv("PG_HOST"),
+		Port:     os.Getenv("PG_PORT"),
+		User:     os.Getenv("PG_USER"),
+		Password: os.Getenv("PG_PASSWORD"),
+		Database: os.Getenv("PG_DATABASE"),
 	}
 
 	cfg.AWSConfig = AWSConfig{
-		SQSQueueUrl: viper.GetString("QUEUE_URL"),
+		SQSQueueUrl: os.Getenv("QUEUE_URL"),
 	}
 
 	cfg.Mail = MailConfig{
-		From:     viper.GetString("MAIL_FROM"),
-		Username: viper.GetString("MAIL_USER"),
-		Password: viper.GetString("MAIL_PASSWORD"),
-		SmtpHost: viper.GetString("SMTP_HOST"),
-		SmtpPort: viper.GetString("SMTP_PORT"),
+		From:     os.Getenv("MAIL_FROM"),
+		Username: os.Getenv("MAIL_USER"),
+		Password: os.Getenv("MAIL_PASSWORD"),
+		SmtpHost: os.Getenv("SMTP_HOST"),
+		SmtpPort: os.Getenv("SMTP_PORT"),
 	}
 
-	return nil
+	return cfg, nil
 }
 
 func GetDB() DBConfig {
