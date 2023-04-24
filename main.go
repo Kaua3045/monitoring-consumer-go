@@ -42,6 +42,7 @@ func processMessages() {
 
 	// configure aws session
 	config, err := config.LoadDefaultConfig(context.TODO())
+	config.Region = "sa-east-1"
 
 	if err != nil {
 		log.Fatalf("Error on create aws session: %v", err)
