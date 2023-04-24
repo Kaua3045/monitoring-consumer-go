@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -17,8 +18,17 @@ import (
 // {"id": "d18f7b89-601b-4d75-92d1-44b76bb1bed8", "owner_id": "b8ece0fa-5402-459f-bb39-9222fc1775aa", "title": "API - Monitoring", "url": "https://httpstat.us/500"}
 
 func main() {
-	// godotenv.Load()
-	err := godotenv.Load()
+	env := os.Getenv("ENVIRONMENT")
+
+	if env != "PRODUCTION" {
+		err := godotenv.Load()
+
+		if err != nil {
+			log.Fatal("Error on load .env file")
+		}
+	}
+
+	_, err := configs.Load()
 
 	if err != nil {
 		log.Fatalf("Error on load configs: %v", err)
