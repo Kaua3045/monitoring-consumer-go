@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"log"
+	"time"
 
 	"github.com/monitoring-consumer/database"
 	"github.com/monitoring-consumer/models"
@@ -28,5 +29,22 @@ func InsertLinkResponse(response models.LinkResponses) {
 
 	if err != nil {
 		log.Fatalf("Error on insert link response in database: %v", err)
+	}
+}
+
+func UpdatLink(linkId string, nextExecuteDate *time.Time) {
+	conn, err := database.OpenConnection()
+
+	if err != nil {
+		log.Fatalf("Error on open database connection: %v", err)
+	}
+	defer conn.Close()
+
+	sql := `UPDATE links SET next_execute_date=$1 WHERE id=$2`
+
+	_, err = conn.Exec(sql, nextExecuteDate, linkId)
+
+	if err != nil {
+		log.Fatalf("Error on update link next execute date in database: %v", err)
 	}
 }

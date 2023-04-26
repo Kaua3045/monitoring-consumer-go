@@ -109,3 +109,39 @@ func SendInternalErrorMail(profileId string, title string) {
 		log.Printf("Error on send mail: %v", err)
 	}
 }
+
+type LinkExecutionType string
+type LinkExecutionFunc func(*time.Time) *time.Time
+
+const (
+	NoRepeat LinkExecutionType = "NO_REPEAT"
+	EveryDay LinkExecutionType = "EVERY_DAYS"
+	// Adicionar mais tipos de linkExecution aqui, se necessário
+)
+
+var linkExecutionFuncMap = map[LinkExecutionType]LinkExecutionFunc{
+	NoRepeat: func(executeDate *time.Time) *time.Time {
+		return nil
+	},
+	EveryDay: func(executeDate *time.Time) *time.Time {
+		nextExecuteDate := executeDate.Add(24 * time.Hour)
+		return &nextExecuteDate
+	},
+}
+
+func UpdateUrl(urlId string, linkExecution string, executeDate string) {
+	dateLayout := "2006-01-02T15:04:05Z"
+	executeDateConverted, err := time.Parse(dateLayout, executeDate)
+
+	if err != nil {
+		log.Fatal("Error on parse date to specified layout")
+	}
+
+	getNextExecuteDate, ok := linkExecutionFuncMap[LinkExecutionType(linkExecution)]
+
+	if !ok {
+		log.Fatal("Error getting link execution type: this link execution type does not exist.")
+	}
+
+	repositories.UpdatLink(urlId, getNextExecuteDate(&executeDateConverted))
+}

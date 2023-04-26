@@ -58,7 +58,7 @@ func processMessages() {
 		result, err := sqsClient.ReceiveMessage(context.Background(), &sqs.ReceiveMessageInput{
 			QueueUrl:            aws.String(cfg.SQSQueueUrl),
 			MaxNumberOfMessages: *aws.Int32(10),
-			VisibilityTimeout:   *aws.Int32(10),
+			VisibilityTimeout:   *aws.Int32(30),
 			WaitTimeSeconds:     *aws.Int32(5),
 		})
 
@@ -83,6 +83,7 @@ func processMessages() {
 
 			// Salva no banco de dados a URL
 			handlers.SaveUrlResponse(linkStruct.Id, responseTime, statusCode, statusText)
+			handlers.UpdateUrl(linkStruct.Id, linkStruct.Link_execution, linkStruct.Execute_date)
 
 			// statusCodeStr := strconv.Itoa(statusCode)
 

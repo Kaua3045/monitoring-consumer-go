@@ -7,7 +7,8 @@ type Link struct {
 	Owner_id       string `json:"owner_id"`
 	Title          string `json:"title"`
 	Url            string `json:"url"`
-	Link_execution string `json:"link_execution"`
+	Execute_date   string `json:"nextExecuteDate"`
+	Link_execution string `json:"linkExecution"`
 }
 
 type LinkResponses struct {
