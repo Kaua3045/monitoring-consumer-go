@@ -114,8 +114,9 @@ type LinkExecutionType string
 type LinkExecutionFunc func(*time.Time) *time.Time
 
 const (
-	NoRepeat LinkExecutionType = "NO_REPEAT"
-	EveryDay LinkExecutionType = "EVERY_DAYS"
+	NoRepeat      LinkExecutionType = "NO_REPEAT"
+	EveryDay      LinkExecutionType = "EVERY_DAYS"
+	OnSpecificDay LinkExecutionType = "ON_SPECIFIC_DAY"
 	// Adicionar mais tipos de linkExecution aqui, se necessário
 )
 
@@ -125,6 +126,10 @@ var linkExecutionFuncMap = map[LinkExecutionType]LinkExecutionFunc{
 	},
 	EveryDay: func(executeDate *time.Time) *time.Time {
 		nextExecuteDate := executeDate.Add(24 * time.Hour)
+		return &nextExecuteDate
+	},
+	OnSpecificDay: func(executeDate *time.Time) *time.Time {
+		nextExecuteDate := executeDate.AddDate(0, 1, 0)
 		return &nextExecuteDate
 	},
 }
