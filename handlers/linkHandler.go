@@ -125,11 +125,29 @@ var linkExecutionFuncMap = map[LinkExecutionType]LinkExecutionFunc{
 		return nil
 	},
 	EveryDay: func(executeDate *time.Time) *time.Time {
-		nextExecuteDate := executeDate.Add(24 * time.Hour)
+		currentDay := time.Now().Day()
+		nextExecuteDate := time.Date(
+			executeDate.Year(),
+			executeDate.Month(),
+			currentDay+1,
+			executeDate.Hour(),
+			executeDate.Minute(),
+			executeDate.Second(),
+			executeDate.Nanosecond(),
+			executeDate.Location())
 		return &nextExecuteDate
 	},
 	OnSpecificDay: func(executeDate *time.Time) *time.Time {
-		nextExecuteDate := executeDate.AddDate(0, 1, 0)
+		currentMonth := time.Now().Month()
+		nextExecuteDate := time.Date(
+			executeDate.Year(),
+			currentMonth+1,
+			executeDate.Day(),
+			executeDate.Hour(),
+			executeDate.Minute(),
+			executeDate.Second(),
+			executeDate.Nanosecond(),
+			executeDate.Location())
 		return &nextExecuteDate
 	},
 }
