@@ -15,8 +15,6 @@ import (
 	"github.com/monitoring-consumer/models"
 )
 
-// {"id": "d18f7b89-601b-4d75-92d1-44b76bb1bed8", "owner_id": "b8ece0fa-5402-459f-bb39-9222fc1775aa", "title": "API - Monitoring", "url": "https://httpstat.us/500"}
-
 func main() {
 	env := os.Getenv("ENVIRONMENT")
 
@@ -51,8 +49,6 @@ func processMessages() {
 	// Cria o cliente do SQS
 	sqsClient := sqs.NewFromConfig(config)
 
-	// Url da fila
-
 	// Receber as mensagens da fila
 	for {
 		result, err := sqsClient.ReceiveMessage(context.Background(), &sqs.ReceiveMessageInput{
@@ -84,12 +80,6 @@ func processMessages() {
 			// Salva no banco de dados a URL
 			handlers.SaveUrlResponse(linkStruct.Id, responseTime, statusCode, statusText)
 			handlers.UpdateUrl(linkStruct.Id, linkStruct.Link_execution, linkStruct.Execute_date)
-
-			// statusCodeStr := strconv.Itoa(statusCode)
-
-			// if strings.HasPrefix(statusCodeStr, "5") {
-			// 	go handlers.SendInternalErrorMail(linkStruct.Owner_id, linkStruct.Title)
-			// }
 
 			// Deleta a mensagem da fila
 			_, err = sqsClient.DeleteMessage(context.Background(), &sqs.DeleteMessageInput{
