@@ -114,9 +114,11 @@ type LinkExecutionType string
 type LinkExecutionFunc func(*time.Time) *time.Time
 
 const (
-	NoRepeat      LinkExecutionType = "NO_REPEAT"
-	EveryDay      LinkExecutionType = "EVERY_DAYS"
-	OnSpecificDay LinkExecutionType = "ON_SPECIFIC_DAY"
+	NoRepeat       LinkExecutionType = "NO_REPEAT"
+	EveryDay       LinkExecutionType = "EVERY_DAYS"
+	OnSpecificDay  LinkExecutionType = "ON_SPECIFIC_DAY"
+	TwoTimesAMonth LinkExecutionType = "TWO_TIMES_A_MONTH"
+	EveryFiveHours LinkExecutionType = "EVERY_FIVE_HOURS"
 	// Adicionar mais tipos de linkExecution aqui, se necessário
 )
 
@@ -148,6 +150,25 @@ var linkExecutionFuncMap = map[LinkExecutionType]LinkExecutionFunc{
 			executeDate.Second(),
 			executeDate.Nanosecond(),
 			executeDate.Location())
+		return &nextExecuteDate
+	},
+	TwoTimesAMonth: func(executeDate *time.Time) *time.Time {
+		currentDay := time.Now().Day()
+		nextExecuteDate := time.Date(
+			executeDate.Year(),
+			executeDate.Month(),
+			currentDay+15,
+			executeDate.Hour(),
+			executeDate.Minute(),
+			executeDate.Second(),
+			executeDate.Nanosecond(),
+			executeDate.Location())
+
+		// TODO: aqui verifica se o mês atual é maior que o mês que veio, se for atualiza
+		if time.Now().Local().Month() > executeDate.Month() {
+			nextExecuteDate = nextExecuteDate.AddDate(0, 1, 0)
+		}
+
 		return &nextExecuteDate
 	},
 }
