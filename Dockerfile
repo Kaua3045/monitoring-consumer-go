@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN go build -o server
+RUN CGO_ENABLED=0 go build -o server
 
 FROM gcr.io/distroless/base-debian10
 
